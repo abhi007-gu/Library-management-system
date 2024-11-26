@@ -1,0 +1,76 @@
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BooksDAO {
+    // Add a book
+    public void addBook(String title, String author, String isbn, String publisher, int year, int copies) {
+        String sql = "INSERT INTO books (title, author, isbn, publisher, published_year, copies) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, title);
+            stmt.setString(2, author);
+            stmt.setString(3, isbn);
+            stmt.setString(4, publisher);
+            stmt.setInt(5, year);
+            stmt.setInt(6, copies);
+
+            int rows = stmt.executeUpdate();
+            System.out.println(rows + " book(s) added successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error while adding a book: " + e.getMessage());
+        }
+    }
+
+    // List all books
+    public List<String> listBooks() {
+        String sql = "SELECT * FROM books";
+        List<String> books = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet resultSet = stmt.executeQuery()) {
+
+            while (resultSet.next()) {
+                books.add("ID: " + resultSet.getInt("book_id") +
+                        ", Title: " + resultSet.getString("title") +
+                        ", Author: " + resultSet.getString("author") +
+                        ", Copies: " + resultSet.getInt("copies"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while fetching books: " + e.getMessage());
+        }
+        return books;
+    }
+
+    // Update book copies
+    public void updateBookCopies(int bookId, int copies) {
+        String sql = "UPDATE books SET copies = ? WHERE book_id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, copies);
+            stmt.setInt(2, bookId);
+
+            int rows = stmt.executeUpdate();
+            System.out.println(rows + " book(s) updated successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error while updating book: " + e.getMessage());
+        }
+    }
+
+    // Delete a book
+    public void deleteBook(int bookId) {
+        String sql = "DELETE FROM books WHERE book_id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, bookId);
+
+            int rows = stmt.executeUpdate();
+            System.out.println(rows + " book(s) deleted successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error while deleting book: " + e.getMessage());
+        }
+    }
+}

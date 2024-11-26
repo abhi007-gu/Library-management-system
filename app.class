@@ -1,0 +1,22 @@
+public class App {
+    public static void main(String[] args) {
+        BooksDAO booksDAO = new BooksDAO();
+        UsersDAO usersDAO = new UsersDAO();
+        IssuedBooksDAO issuedBooksDAO = new IssuedBooksDAO();
+
+        // Add a new book
+        booksDAO.addBook("Effective Java", "Joshua Bloch", "1234567890123", "Addison-Wesley", 2018, 10);
+
+        // List all books
+        booksDAO.listBooks();
+
+        // Add a user
+        usersDAO.addUser("John Doe", "john@example.com", "password123", "9876543210", "MEMBER");
+
+        // Issue a book
+        issuedBooksDAO.issueBook(1, 1);
+
+        // Return a book
+        issuedBooksDAO.returnBook(1);
+    }
+}

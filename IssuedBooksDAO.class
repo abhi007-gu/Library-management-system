@@ -1,0 +1,34 @@
+import java.sql.*;
+
+public class IssuedBooksDAO {
+    // Issue a book
+    public void issueBook(int bookId, int userId) {
+        String sql = "INSERT INTO issued_books (book_id, user_id, issue_date, status) VALUES (?, ?, CURRENT_DATE, 'BORROWED')";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, bookId);
+            stmt.setInt(2, userId);
+
+            int rows = stmt.executeUpdate();
+            System.out.println(rows + " book(s) issued successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error while issuing book: " + e.getMessage());
+        }
+    }
+
+    // Return a book
+    public void returnBook(int issueId) {
+        String sql = "UPDATE issued_books SET return_date = CURRENT_DATE, status = 'RETURNED' WHERE issue_id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, issueId);
+
+            int rows = stmt.executeUpdate();
+            System.out.println(rows + " book(s) returned successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error while returning book: " + e.getMessage());
+        }
+    }
+}

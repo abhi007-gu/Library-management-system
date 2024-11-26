@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background: #333;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        nav h1 {
+            margin: 0;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        section {
+            padding: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <!-- HTML Content -->
+    <nav>
+        <h1>Library Management</h1>
+        <ul>
+            <li><a href="#add-book">Add Book</a></li>
+            <li><a href="#book-list">Book List</a></li>
+        </ul>
+    </nav>
+    <section id="add-book">
+        <h2>Add a Book</h2>
+        <form id="libraryForm">
+            <input type="text" id="bookName" placeholder="Book Name" required>
+            <input type="text" id="author" placeholder="Author Name" required>
+            <select id="type">
+                <option value="Fiction">Fiction</option>
+                <option value="Non-fiction">Non-fiction</option>
+                <option value="Programming">Programming</option>
+            </select>
+            <button type="submit">Add Book</button>
+        </form>
+    </section>
+    <section id="book-list">
+        <h2>Your Books</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Dynamic content -->
+            </tbody>
+        </table>
+    </section>
+    <script>
+        // JavaScript Code
+        document.getElementById('libraryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('bookName').value;
+            const author = document.getElementById('author').value;
+            const type = document.getElementById('type').value;
+            
+            if (name && author) {
+                const tableBody = document.getElementById('tableBody');
+                const row = `<tr>
+                    <td>${name}</td>
+                    <td>${author}</td>
+                    <td>${type}</td>
+                    <td><button onclick="deleteBook(this)">Delete</button></td>
+                </tr>`;
+                tableBody.innerHTML += row;
+                document.getElementById('libraryForm').reset();
+            } else {
+                alert("Please fill in all the fields!");
+            }
+        });
+
+        function deleteBook(element) {
+            element.parentElement.parentElement.remove();
+        }
+    </script>
+</body>
+</html>

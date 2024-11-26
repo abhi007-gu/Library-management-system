@@ -1,0 +1,41 @@
+import java.sql.*;
+
+public class UsersDAO {
+    // Add a user
+    public void addUser(String name, String email, String password, String phone, String role) {
+        String sql = "INSERT INTO users (name, email, password, phone, role) VALUES (?, ?, ?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.setString(4, phone);
+            stmt.setString(5, role);
+
+            int rows = stmt.executeUpdate();
+            System.out.println(rows + " user(s) added successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error while adding user: " + e.getMessage());
+        }
+    }
+
+    // List all users
+    public void listUsers() {
+        String sql = "SELECT * FROM users";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet resultSet = stmt.executeQuery()) {
+
+            System.out.println("Users in the system:");
+            while (resultSet.next()) {
+                System.out.println("ID: " + resultSet.getInt("user_id") +
+                        ", Name: " + resultSet.getString("name") +
+                        ", Email: " + resultSet.getString("email") +
+                        ", Role: " + resultSet.getString("role"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while fetching users: " + e.getMessage());
+        }
+    }
+}
